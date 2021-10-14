@@ -10,6 +10,6 @@ class ContactsApi(View):
 
     @csrf_exempt
     def post(self, request, *args, **kwargs):
-        c1 = Contacts(Name="vlad", Surname="0004", Phone="111")
+        c1 = Contacts(Name="ihor", Surname="0006", Phone="222")
         c1.save()
         return HttpResponse("success")
