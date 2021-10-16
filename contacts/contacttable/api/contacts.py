@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from contacttable.models import Contacts
+from contacttable.models import Contacts, ContactsSerializer
 from rest_framework.views import APIView
 from django.db.models import Q
 from django.forms.models import model_to_dict
@@ -27,7 +27,7 @@ class ContactsApi(APIView):
         town = request.data.get("town", "")
         street = request.data.get("street", "")
         url = request.data.get("url", "")
-        photo = request.data.get("photo", "")
+        photo = request.data.get("photo")
 
         if name is None or surname is None or phone is None:
             return HttpResponse("Вы не ввели достаточно информации, повторите попытку", status=400)
@@ -35,4 +35,4 @@ class ContactsApi(APIView):
             c1 = Contacts(Name=name, Surname=surname, Phone=phone, Address=address,
                           Country=country, Town=town, Street=street, Url=url, Photo=photo)
         c1.save()
-        return JsonResponse(model_to_dict(c1), status=201)
+        return JsonResponse(ContactsSerializer(c1).data, status=201)

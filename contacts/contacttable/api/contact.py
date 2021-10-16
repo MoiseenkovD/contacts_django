@@ -1,8 +1,9 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from contacttable.models import Contacts
+from contacttable.models import Contacts, ContactsSerializer
 from rest_framework.views import APIView
 from django.forms.models import model_to_dict
+
 
 class ContactApi(APIView):
     @csrf_exempt
@@ -34,13 +35,13 @@ class ContactApi(APIView):
         except Contacts.DoesNotExist:
             return HttpResponse('Такого ID не существует', status=404)
 
-        return JsonResponse(model_to_dict(c1))
+        return JsonResponse(ContactsSerializer(c1).data)
 
     @csrf_exempt
     def delete(self, request, id):
         try:
             wd = Contacts.objects.get(pk=id)
             wd.delete()
-            return JsonResponse(model_to_dict(wd))
+            return JsonResponse(ContactsSerializer(wd).data)
         except Contacts.DoesNotExist:
             return HttpResponse('Такого ID не существует', status=404)
