@@ -41,6 +41,8 @@ class ContactApi(APIView):
     def delete(self, request, id):
         try:
             wd = Contacts.objects.get(pk=id)
+            if wd.Photo:
+                wd.Photo.delete()
             wd.delete()
             return JsonResponse(ContactsSerializer(wd).data)
         except Contacts.DoesNotExist:
